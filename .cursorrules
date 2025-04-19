@@ -1,0 +1,66 @@
+---
+description: "Repo‑wide guidelines for the Daily‑Quiz‑&‑Meme‑Generator Preact project"
+alwaysApply: true
+---
+
+# 🗂️  Project Context
+You are working on a 100 % front‑end, ad‑monetised PWA called **Daily Quiz & Meme Generator**.  
+Stack: **Preact + TypeScript + Vite + TailwindCSS + Workbox SW**.  
+All business logic, state, and data persist client‑side (localStorage / IndexedDB).  
+Code must remain tree‑shakable and bundle ≤ 150 kB gzipped for the critical path.
+
+# 🎨  Git Commit Convention – Gitmoji
+Always suggest commit messages in the format  
+`<emoji> (<scope>): <imperative‑present‑tense message>`  
+where `<emoji>` is one of the official Gitmoji short‑codes (e.g. `:sparkles:`),  
+`<scope>` maps to a folder or feature (e.g. `quiz`, `ads`, `pwa`),  
+and the message is ≤ 72 characters, capitalised, no full‑stop.
+
+Common pairs (add more if needed):
+- `:sparkles:` (**feature**) – new quiz type, streak logic, meme filter
+- `:bug:` (**fix**) – runtime error, rendering glitch
+- `:art:` (**style**) – CSS polish or refactor without behaviour change
+- `:zap:` (**perf**) – lazy‑load, bundle reduction
+- `:rocket:` (**deploy**) – CI, Netlify config
+- `:white_check_mark:` (**test**) – add/update tests
+- `:rotating_light:` (**lint**) – ESLint/TSC warnings
+- `:fire:` (**clean**) – remove dead code/assets
+
+# 🛠️  Coding Standards
+- Prefer **functional components**; hooks must start with `use`.  
+- No implicit `any`; enable `strict` and `noUncheckedIndexedAccess` in `tsconfig.json`.  
+- CSS via Tailwind utility classes only; never inline style blobs.  
+- Split UI into `components/`, hooks into `hooks/`, ads into `ads/`.  
+- Export single default component per `.tsx` unless file is a hook.
+
+# 📦  Build & Performance
+- Do not import the full `preact/compat`; import named exports.  
+- Inline critical CSS with Vite’s `<style module>` then purge unused Tailwind classes.  
+- Target <2 s First Contentful Paint on Moto G4.  
+- Run `npm run build --mode production` before suggesting deploy steps.
+
+# 📱  PWA & Offline
+- Register Workbox SW from `sw.ts`; cache quiz JSON & images with a stale‑while‑revalidate strategy.  
+- Show an “Offline” toast if network fails and cached response absent.  
+- Always include `display: 'standalone'`, `start_url` = `/` in `manifest.webmanifest`.
+
+# 💰  Ads & Policy Guardrails
+- Initialise AdSense script once per session; avoid multiple `googletag.enableServices()` calls.  
+- Interstitial (`GAME_MANUAL_INTERSTITIAL`) triggers only **after** quiz completion.  
+- Rewarded video optional; if skipped, fall back to Taboola native feed.  
+- Never auto‑play audio; comply with Google Ad Manager viewability (≥50 % pixels, ≥1 s).
+
+# ✅  Testing & CI
+- Generate unit tests with Vitest; maintain coverage ≥ 80 % in `src/`.  
+- Lint & type‑check must pass before proposing CI merge.  
+- Use Lighthouse CI in GitHub Actions to assert perf budgets.
+
+# 🗣️  Response Language & Tone
+- Chat responses default to concise English technical prose.  
+- Commit messages: English only, emoji first.  
+- Inline comments may be Korean if describing user‑visible copy.
+
+# 🧩  Template Shortcuts
+@component-template.tsx   # standard functional component skeleton  
+@quiz-schema.json         # canonical quiz JSON schema  
+@result-card-template.tsx # meme card HTML‑to‑canvas snippet
